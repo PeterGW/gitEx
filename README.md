@@ -7,3 +7,5 @@ release -first
 release branch -agin frist
 
 branch1 -add
+
+branch2 -add two
