@@ -1,0 +1,137 @@
+<html>
+<head>
+<style type="text/css">
+	.tragetDiv{
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100px;
+		height: 100px;
+		border:1px solid;
+		background-color: green;
+		z-index:999;
+	}
+	.point{
+		position: absolute;
+		margin-top:200px;
+		margin-left:200px;
+		height:200px;
+		width: 200px;
+		background-color: blue;
+	}
+</style>
+</head>
+
+<body>
+	<div id="port" class="tragetDiv">
+		ddddd
+	</div>
+	<div class="point">
+		aaaaa
+	</div>
+	<script type="text/javascript">
+	var tragetDiv = document.getElementById("port");
+	var mkt_DrgIan = {};
+            mkt_DrgIan.Drag = function (dragObj,targetObj) {
+                //debugger;
+                this.elem = dragObj;
+                this.tElem = targetObj;
+                this.disX = 0;
+                this.disY = 0;
+                this.elemW = this.elem.offsetWidth;
+                this.elemH = this.elem.offsetHeight;
+                this.init();
+            }
+            mkt_DrgIan.Drag.prototype = {
+                constructor: mkt_DrgIan.Drag,//不默认指向Object构造函数 判断类型使用
+                clientW: document.documentElement.clientWidth,
+                clientH: document.documentElement.clientHeight,
+                //注意直接绑定函数 this就指向document非原对象 所以一定要用闭包
+                fnDown: function (e) {
+                    var self = this,oEvent;
+                    if(e.targetTouches){
+                        oEvent = e.targetTouches[0] || window.event;
+                    }else{
+                        oEvent = e || window.event;
+                    }
+                    
+                    self.disX = oEvent.pageX - self.elem.offsetLeft;
+                    self.disY = oEvent.pageY - self.elem.offsetTop;
+                    
+                    self.elem.ontouchmove = function (e) {
+                        self.fnMove(e);
+                    };
+                    self.elem.ontouchend = function () {
+                        self.fnUp();
+                    }
+
+                    self.elem.onmousemove = function (e) {
+                        self.fnMove(e);
+                    };
+                    self.elem.onmouseup = function () {
+                        self.fnUp();
+                    }
+                    
+                },
+                fnMove: function (e) {
+
+                    e.preventDefault();
+                    var self = this,oEvent;
+
+                    if(e.targetTouches){
+                        oEvent = e.targetTouches[0] || window.event;
+                    }else{
+                        oEvent = e || window.event;
+                    }
+                    
+                        
+                    var left = 0,
+                        top =  oEvent.clientY - self.disY;
+                    // left < 0 ? left = 0 : left;
+                    // left > self.clientW - self.elemW ? left = self.clientW - self.elemW : left;
+
+                    top < 0 ? top = 0 : top;
+                    top > self.clientH - self.elemH ? top = self.clientH - self.elemH : top;
+                    self.elem.style.left = left + "px";
+                    self.elem.style.top = top + "px";
+                },
+                fnUp: function () {
+                    var self = this;
+                    self.elem.ontouchend = null;
+                    self.elem.ontouchmove = null;
+
+                    self.elem.onmousup = null;
+                    self.elem.onmousemove = null;
+                },
+                init: function () {
+                    
+                    var self = this,
+                        elem = typeof self.elem === "object" ? self.elem : undefined;
+                    if (!elem) {
+                        return false;
+                    }
+                    var tElem = self.tElem ? self.tElem : elem;
+                    
+                    tElem.ontouchstart = function (e) {
+                        self.fnDown(e);
+                    }
+                    tElem.onmousedown = function (e) {
+                        self.fnDown(e);
+                    }
+                    return false;
+                    
+                }
+            }
+	tragetDiv.addEventListener("click",function(){
+		setTimeout(function(){
+			alert("111");
+			window.location = "http://m.ctrip.com/m/c1663";
+		},3000);
+	},false);
+
+	new mkt_DrgIan.Drag(tragetDiv);
+	
+	//startDrag(tragetDiv,tragetDiv);
+</script>
+</body>
+</html>
