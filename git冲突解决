@@ -1,0 +1,20 @@
+git merge 冲突：
+    
+    用户A提交并merge,用户B提交没有merge,当B去merge的时候会push不上去
+    1、解决办法：
+       git stash                       --把本地当前的改动暂存到缓存区
+       git pull                        --拉取线上最新的代码
+       git stash pop                   --获取暂存区最新的改动
+       git diff -w  文件               --手动merge改动
+       
+    2、解决办法
+       git log                         --查看当前的记录，并找到要回退到的commitid
+       git reset --hard HEAD^X         --会退到XX这个commitid的版本，再修改改动提交
+       
+    3、解决办法
+       git log                         --查看当前提交记录
+       git reset --soft                --回退到commit之前，代码还在
+       git pull                        --更新，修改
+       git commit --amend              --如果缺少changeid,此命令添加进去  
+       
+    
